@@ -4,11 +4,11 @@ import ScanContainer from 'ScanContainer';
 
 import './index.css';
 
-const Challenge = () => (
+const App = () => (
   <div className='app'>
-    <header className='app-header'>Software Challenge</header>
+    <header>Software Challenge</header>
     <ScanContainer />
   </div>
 );
 
-export default Challenge;
+export default App;
