@@ -1,28 +1,24 @@
 import React from 'react';
 import './index.css';
 
-class ScanList extends React.Component {
-  render() {
-    return (
-      <div>
-        <div className='Header'>Scans:</div>
-        <div className='ScanList'>
-          {this.props.scans.map((scan, i) => {
-            const user = this.props.users.find(u => u.id === scan.scannedByUserId);
-            return (
-              <div className='ScanListItem' key={i}>
-                {scan.name}
-                <div className='UserName'>
+const ScanList = ({ scans, users }) => (
+  <>
+    <div className='header'>Scans:</div>
+    <div className='scan-list'>
+      {scans.map((scan) => {
+        const user = users.find(u => u.id === scan.scannedByUserId);
+        return (
+          <div className='scan-list-item' key={`${scan.name}${user.name}`}>
+            {scan.name}
+            <div className='user-name'>
 by
-                  {user.name}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-}
+              {user.name}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </>
+);
 
 export default ScanList;
