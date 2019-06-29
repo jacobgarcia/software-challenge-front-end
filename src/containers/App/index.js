@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ScanContainer from 'ScanContainer';
+import ScanContainer from 'containers/ScanContainer';
 
 import './index.css';
 
