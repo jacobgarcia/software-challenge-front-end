@@ -1,0 +1,32 @@
+.paper {
+  width: 50%;
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+.table {
+  width: 50%;
+  font-size: 0.9rem;
+  > div {
+    display: flex;
+    border-bottom: 1px solid #d0d0d0;
+    padding: 4px 16px;
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 12px;
+    }
+    &:first-child > div {
+      font-weight: 600;
+    }
+    > * {
+      flex-basis: 100px;
+      flex-grow: 1;
+    }
+  }
+}
+
+.layout {
+  width: 'auto';
+  marginleft: theme.spacing(2);
+  marginright: theme.spacing(2);
+}

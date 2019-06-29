@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { createScanData, createUserData } from 'utils/data';
-import ScanList from 'components/ScanList';
 import ScanTable from 'components/ScanTable';
 
 class ScanContainer extends Component {
@@ -10,11 +9,9 @@ class ScanContainer extends Component {
   };
 
   render() {
-    const { scans, users } = this.state;
     return (
       <>
-        <ScanList scans={scans} users={users} />
-        <ScanTable />
+        <ScanTable {...this.state} />
       </>
     );
   }

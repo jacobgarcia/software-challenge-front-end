@@ -11,7 +11,7 @@ const ScanList = ({ scans, users }) => (
           <div className='scan-list-item' key={`${scan.name}${user.name}`}>
             {scan.name}
             <div className='user-name'>
-by
+              by
               {user.name}
             </div>
           </div>
