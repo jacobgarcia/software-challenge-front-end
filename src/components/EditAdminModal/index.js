@@ -8,9 +8,45 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Radio from '@material-ui/core/Radio';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
+import SelectUsername from 'components/SelectUsername';
 import './index.css';
 
+const useStyles = makeStyles(theme => ({
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      width: 600,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+    root: {
+      width: '100%',
+      marginTop: theme.spacing(3),
+      overflowX: 'auto',
+    },
+    table: {
+      minWidth: 700,
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+      color: 'red',
+    },
+    whiteColor: {
+      color: 'red',
+    },
+  },
+}));
 function getInitialState() {
   return {
     _id: null,
@@ -31,16 +67,10 @@ class ClientModal extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.selectedClient && this.props.selectedClient && !this.state.username) {
+    if (this.props.selectedClient !== prevProps.selectedClient) {
       this.setState({
         ...this.props.selectedClient,
-        pastUsername: this.props.selectedClient.username,
       });
-      return;
-    }
-
-    if (prevProps.addUserModalOpen && !this.props.addUserModalOpen && this.state.username) {
-      this.setState(getInitialState);
     }
   }
 
@@ -54,15 +84,20 @@ class ClientModal extends Component {
     });
   };
 
-  onSave = async () => {};
+  handleChange = (event) => {
+    this.setState(oldValues => ({
+      ...oldValues,
+      [event.target.name]: event.target.value,
+    }));
+  };
 
   render() {
     const {
       props: {
-        addUserModalOpen, toggleUserAddModal, open, handleClose,
+        addUserModalOpen, toggleUserAddModal, open, handleClose, selectedClient, onSave,
       },
       state: {
-        username, name, valid, _id = true, email, company, error,
+        username, name, valid, _id = true, email, company, error, id,
       },
     } = this;
 
@@ -84,22 +119,11 @@ class ClientModal extends Component {
                 />
               </div>
             )}
-            {_id && (
-              <div>
-                <TextField
-                  required
-                  label='Username'
-                  margin='normal'
-                  variant='outlined'
-                  value={username}
-                  onChange={this.onChange('username')}
-                />
-              </div>
-            )}
+            <SelectUsername user={username} handleChange={this.handleChange} />
             {error && <p>{error}</p>}
             <Button
               disabled={valid}
-              onClick={this.onSave}
+              onClick={() => onSave(id, name, username)}
               variant='contained'
               color='secondary'
               style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}

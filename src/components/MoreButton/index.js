@@ -15,14 +15,14 @@ function MoreButton(props) {
     setValues({ anchorEl: null });
   }
 
-  const { key, handleClick } = props;
+  const { user, handleClick } = props;
   return (
     <div style={{ display: 'inline-block' }}>
       <IconButton
         id={Date.now()}
         aria-owns={values.anchorEl ? 'simple-menu' : null}
         aria-haspopup='true'
-        onClick={evt => props.handleClick(evt)}
+        onClick={evt => props.handleClick(evt, user)}
       >
         <MoreVertIcon />
       </IconButton>

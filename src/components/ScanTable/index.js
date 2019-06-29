@@ -85,9 +85,13 @@ function ScanTable({ scans, users }) {
     setValues({ anchorEl: false });
   }
 
-  function handleClick() {
+  function handleClick(event, user) {
+    const [name, username, id] = user.split('-');
     setValues({
       anchorEl: true,
+      name,
+      username,
+      id,
     });
   }
 
@@ -113,9 +117,25 @@ function ScanTable({ scans, users }) {
 
     scans.sort(sortFunction);
   }
+
+  function handleEdit(id, name, userId) {
+    const editedScan = scans.find(scan => scan.id === parseInt(id, 10));
+    editedScan.name = name;
+    editedScan.scannedByUserId = parseInt(userId, 10);
+    handleClose();
+  }
+
+  console.log(scans);
+
   return (
     <main className={classes.layout}>
-      <EditAdminModal open={values.anchorEl} handleClose={handleClose} />
+      <EditAdminModal
+        key={values}
+        open={values.anchorEl}
+        handleClose={handleClose}
+        selectedClient={values}
+        onSave={handleEdit}
+      />
       <FormControl className={classes.formControl} style={{ marginBottom: '30px', width: '50%' }}>
         <InputLabel htmlFor='age-simple'>Sort Scans</InputLabel>
         <Select
@@ -148,12 +168,12 @@ function ScanTable({ scans, users }) {
             {scans.map((scan) => {
               const user = users.find(u => u.id === scan.scannedByUserId);
               return (
-                <TableRow key={`${scan.name}${user.name}`}>
+                <TableRow key={`${scan.id}`}>
                   <TableCell align='left'>{scan.name}</TableCell>
                   <TableCell align='right'>{user.name}</TableCell>
                   <TableCell numeric>
                     <MoreButton
-                      key={`${scan.name}${user.name}`}
+                      user={`${scan.name}-${user.id}-${scan.id}`}
                       anchorEl={values.anchorEl}
                       handleClick={handleClick}
                       handleClose={handleClose}
