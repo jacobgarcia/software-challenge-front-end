@@ -56,6 +56,8 @@ function getInitialState() {
     company: '',
     valid: false,
     pastUsername: '',
+    max: 0,
+    min: 0,
   };
 }
 
@@ -85,7 +87,6 @@ class ClientModal extends Component {
   };
 
   handleChange = (event) => {
-    console.log(event.target.name);
     this.setState(oldValues => ({
       ...oldValues,
       [event.target.name]: event.target.value,
@@ -98,17 +99,15 @@ class ClientModal extends Component {
         addUserModalOpen, toggleUserAddModal, open, handleClose, selectedClient, onSave,
       },
       state: {
-        username, name, valid, _id = true, email, company, error, id,
+        username, name, valid, _id = true, email, company, error, id, max, min,
       },
     } = this;
-
-    console.log(username);
 
     return (
       <Modal open={open} onClose={handleClose} className='modal'>
         <div className='paper-container'>
           <div className='paper'>
-            <h3>Edit Scan</h3>
+            <h3>Add Scan</h3>
             {_id && (
               <div>
                 <TextField
@@ -119,19 +118,40 @@ class ClientModal extends Component {
                   value={name}
                   onChange={this.onChange('name')}
                   className='user-name'
+                  style={{ width: '100%' }}
                 />
               </div>
             )}
             <SelectUsername user={username} handleChange={this.handleChange} />
+            <div style={{ marginBottom: '20px' }}>
+              <TextField
+                required
+                label='Min Elevation'
+                variant='outlined'
+                value={min}
+                onChange={this.onChange('min')}
+                className='user-name'
+                style={{ marginRight: '20px' }}
+              />
+              <TextField
+                required
+                label='Max Elevation'
+                variant='outlined'
+                value={max}
+                onChange={this.onChange('max')}
+                className='user-name'
+              />
+            </div>
+
             {error && <p>{error}</p>}
             <Button
               disabled={valid}
-              onClick={() => onSave(id, name, username)}
+              onClick={() => onSave(name, username, min, max)}
               variant='contained'
               color='secondary'
               style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}
             >
-              Edit
+              Add
             </Button>
           </div>
         </div>

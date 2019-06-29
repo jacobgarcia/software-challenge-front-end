@@ -31,7 +31,7 @@ export default function SimpleSelect({ user, handleChange }) {
           name: 'username',
         }}
         variant='filled'
-        value={values.username}
+        value={user}
         input={<OutlinedInput name='age' labelWidth={labelWidth} id='outlined-age-native-simple' />}
       >
         {createUserData().map(user => (

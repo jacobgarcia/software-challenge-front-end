@@ -11,10 +11,12 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 import MoreButton from 'components/MoreButton';
 import EditAdminModal from 'components/EditAdminModal';
-
+import AddScanModal from 'components/AddScanModal';
 import './index.less';
 
 const useStyles = makeStyles(theme => ({
@@ -85,6 +87,10 @@ function ScanTable({ scans, users }) {
     setValues({ anchorEl: false });
   }
 
+  function handleToggle() {
+    setValues({ add: true, name: '', username: '' });
+  }
+
   function handleClick(event, user) {
     const [name, username, id] = user.split('-');
     setValues({
@@ -125,7 +131,17 @@ function ScanTable({ scans, users }) {
     handleClose();
   }
 
-  console.log(scans);
+  function handleAdd(name, userId, min, max) {
+    const newScan = {
+      name,
+      scannedByUserId: userId,
+      elevationMin: min,
+      elevationMax: max,
+    };
+    scans.push(newScan);
+
+    handleClose();
+  }
 
   return (
     <main className={classes.layout}>
@@ -135,6 +151,13 @@ function ScanTable({ scans, users }) {
         handleClose={handleClose}
         selectedClient={values}
         onSave={handleEdit}
+      />
+      <AddScanModal
+        key={values}
+        open={values.add}
+        handleClose={handleClose}
+        selectedClient={values}
+        onSave={handleAdd}
       />
       <FormControl className={classes.formControl} style={{ marginBottom: '30px', width: '50%' }}>
         <InputLabel htmlFor='age-simple'>Sort Scans</InputLabel>
@@ -154,6 +177,17 @@ function ScanTable({ scans, users }) {
           <MenuItem value='elevation'>Elevation</MenuItem>
         </Select>
       </FormControl>
+
+      <Fab
+        size='medium'
+        color='secondary'
+        aria-label='Add'
+        className={classes.margin}
+        style={{ marginTop: '15px', float: 'right' }}
+        onClick={handleToggle}
+      >
+        <AddIcon />
+      </Fab>
 
       <Paper className={classes.root}>
         <Table className={classes.table} size='small'>
