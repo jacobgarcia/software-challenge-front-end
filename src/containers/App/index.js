@@ -7,7 +7,8 @@ import './index.css';
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#FFB74D' }, // Purple and green play nicely together.
+    primary: { main: '#000' }, // Purple and green play nicely together.
+    secondary: { main: '#FFB74D' }, // Purple and green play nicely together.
   },
 });
 

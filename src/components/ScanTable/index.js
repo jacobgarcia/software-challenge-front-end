@@ -12,6 +12,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 
+import MoreButton from 'components/MoreButton';
+import EditAdminModal from 'components/EditAdminModal';
+
 import './index.less';
 
 const useStyles = makeStyles(theme => ({
@@ -49,6 +52,7 @@ function ScanTable({ scans, users }) {
   const [values, setValues] = React.useState({
     sort: '',
     name: 'hai',
+    anchorEl: false,
   });
 
   function sortByName(a, b) {
@@ -77,6 +81,16 @@ function ScanTable({ scans, users }) {
     return a.id - b.id;
   }
 
+  function handleClose() {
+    setValues({ anchorEl: false });
+  }
+
+  function handleClick() {
+    setValues({
+      anchorEl: true,
+    });
+  }
+
   function handleChange(event) {
     setValues(oldValues => ({
       ...oldValues,
@@ -101,8 +115,9 @@ function ScanTable({ scans, users }) {
   }
   return (
     <main className={classes.layout}>
+      <EditAdminModal open={values.anchorEl} handleClose={handleClose} />
       <FormControl className={classes.formControl} style={{ marginBottom: '30px', width: '50%' }}>
-        <InputLabel htmlFor='age-simple'>Sort</InputLabel>
+        <InputLabel htmlFor='age-simple'>Sort Scans</InputLabel>
         <Select
           value={values.sort}
           onChange={handleChange}
@@ -121,11 +136,12 @@ function ScanTable({ scans, users }) {
       </FormControl>
 
       <Paper className={classes.root}>
-        <Table className={classes.table}>
+        <Table className={classes.table} size='small'>
           <TableHead>
             <TableRow>
               <TableCell align='left'>Name</TableCell>
               <TableCell align='right'>Username</TableCell>
+              <TableCell align='left'>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -135,6 +151,14 @@ function ScanTable({ scans, users }) {
                 <TableRow key={`${scan.name}${user.name}`}>
                   <TableCell align='left'>{scan.name}</TableCell>
                   <TableCell align='right'>{user.name}</TableCell>
+                  <TableCell numeric>
+                    <MoreButton
+                      key={`${scan.name}${user.name}`}
+                      anchorEl={values.anchorEl}
+                      handleClick={handleClick}
+                      handleClose={handleClose}
+                    />
+                  </TableCell>
                 </TableRow>
               );
             })}
