@@ -8,6 +8,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 import './index.less';
 
@@ -16,21 +19,109 @@ const useStyles = makeStyles(theme => ({
     width: 'auto',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
+    marginTop: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
       marginLeft: 'auto',
       marginRight: 'auto',
+    },
+    root: {
+      width: '100%',
+      marginTop: theme.spacing(3),
+      overflowX: 'auto',
+    },
+    table: {
+      minWidth: 700,
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+      color: 'red',
+    },
+    whiteColor: {
+      color: 'red',
     },
   },
 }));
 
 function ScanTable({ scans, users }) {
   const classes = useStyles();
+  const [values, setValues] = React.useState({
+    sort: '',
+    name: 'hai',
+  });
 
+  function sortByName(a, b) {
+    const x = a.name.toLowerCase();
+    const y = b.name.toLowerCase();
+    if (x < y) {
+      return -1;
+    }
+    if (x > y) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function sortByUsername(a, b) {
+    const x = users.find(u => u.id === a.scannedByUserId);
+    const y = users.find(u => u.id === b.scannedByUserId);
+    return sortByName(x, y);
+  }
+
+  function sortByElevation(a, b) {
+    return a.elevationMin - b.elevationMin || a.elevationMax - b.elevationMax;
+  }
+
+  function unsort(a, b) {
+    return a.id - b.id;
+  }
+
+  function handleChange(event) {
+    setValues(oldValues => ({
+      ...oldValues,
+      [event.target.name]: event.target.value,
+    }));
+    let sortFunction = () => {};
+    switch (event.target.value) {
+      case 'name':
+        sortFunction = sortByName;
+        break;
+      case 'username':
+        sortFunction = sortByUsername;
+        break;
+      case 'elevation':
+        sortFunction = sortByElevation;
+        break;
+      default:
+        sortFunction = unsort;
+    }
+
+    scans.sort(sortFunction);
+  }
   return (
     <main className={classes.layout}>
-      <Paper className='paper'>
-        <Table className='table'>
+      <FormControl className={classes.formControl} style={{ marginBottom: '30px', width: '50%' }}>
+        <InputLabel htmlFor='age-simple'>Sort</InputLabel>
+        <Select
+          value={values.sort}
+          onChange={handleChange}
+          inputProps={{
+            name: 'sort',
+          }}
+          className={{ root: classes.whiteColor }}
+        >
+          <MenuItem value=''>
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value='name'>Name</MenuItem>
+          <MenuItem value='username'>Username</MenuItem>
+          <MenuItem value='elevation'>Elevation</MenuItem>
+        </Select>
+      </FormControl>
+
+      <Paper className={classes.root}>
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell align='left'>Name</TableCell>
