@@ -57,6 +57,7 @@ function ScanTable({ scans, users }) {
     anchorEl: false,
   });
   const [page, setPage] = React.useState(0);
+  const [nameInput, setNameInput] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   function sortByName(a, b) {
@@ -86,30 +87,38 @@ function ScanTable({ scans, users }) {
   }
 
   function handleClose() {
-    setValues({ anchorEl: false });
+    setValues(oldValues => ({
+      ...oldValues,
+      anchorEl: false,
+      add: false,
+      min: null,
+      max: null,
+    }));
   }
 
   function handleToggle() {
-    setValues({ add: true, name: '', username: '' });
+    setValues(oldValues => ({
+      ...oldValues,
+      add: true,
+      name: '',
+      username: '',
+    }));
   }
 
   function handleClick(event, user) {
     const [name, username, id] = user.split('-');
-    setValues({
+    setValues(oldValues => ({
+      ...oldValues,
       anchorEl: true,
       name,
       username,
       id,
-    });
+    }));
   }
 
-  function handleChange(event) {
-    setValues(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value,
-    }));
+  function sortScans(sort) {
     let sortFunction = () => {};
-    switch (event.target.value) {
+    switch (sort) {
       case 'name':
         sortFunction = sortByName;
         break;
@@ -126,27 +135,40 @@ function ScanTable({ scans, users }) {
     scans.sort(sortFunction);
   }
 
+  function handleChange(event) {
+    setValues(oldValues => ({
+      ...oldValues,
+      [event.target.name]: event.target.value,
+    }));
+    sortScans(event.target.value);
+  }
+
   function handleEdit(id, name, userId) {
     const editedScan = scans.find(scan => scan.id === parseInt(id, 10));
     editedScan.name = name;
     editedScan.scannedByUserId = parseInt(userId, 10);
+    sortScans(values.sort);
     handleClose();
   }
 
-  function handleAdd(name, userId, min, max) {
+  function handleAdd() {
     const newScan = {
-      name,
-      scannedByUserId: userId,
-      elevationMin: min,
-      elevationMax: max,
+      name: values.name,
+      scannedByUserId: values.username,
+      elevationMin: values.min,
+      elevationMax: values.max,
     };
     scans.push(newScan);
-
+    sortScans(values.sort);
     handleClose();
   }
 
   function handleChangePage(event, newPage) {
     setPage(newPage);
+  }
+
+  function onChange(event) {
+    setValues(oldValues => ({ ...oldValues, [event.target.name]: event.target.value }));
   }
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, scans.length - page * rowsPerPage);
@@ -159,6 +181,7 @@ function ScanTable({ scans, users }) {
         handleClose={handleClose}
         selectedClient={values}
         onSave={handleEdit}
+        onChange={onChange}
       />
       <AddScanModal
         key={values}
@@ -166,6 +189,7 @@ function ScanTable({ scans, users }) {
         handleClose={handleClose}
         selectedClient={values}
         onSave={handleAdd}
+        onChange={onChange}
       />
       <FormControl className={classes.formControl} style={{ marginBottom: '30px', width: '50%' }}>
         <InputLabel htmlFor='age-simple'>Sort Scans</InputLabel>

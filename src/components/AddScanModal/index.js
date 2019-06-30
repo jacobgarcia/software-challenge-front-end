@@ -1,163 +1,81 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import Radio from '@material-ui/core/Radio';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 import SelectUsername from 'components/SelectUsername';
 import './index.css';
 
-const useStyles = makeStyles(theme => ({
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    marginTop: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-    root: {
-      width: '100%',
-      marginTop: theme.spacing(3),
-      overflowX: 'auto',
-    },
-    table: {
-      minWidth: 700,
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-      color: 'red',
-    },
-    whiteColor: {
-      color: 'red',
-    },
-  },
-}));
-function getInitialState() {
-  return {
-    _id: null,
-    name: '',
-    username: '',
-    email: '',
-    company: '',
-    valid: false,
-    pastUsername: '',
-    max: 0,
-    min: 0,
-  };
-}
-
-class ClientModal extends Component {
-  static propTypes = {};
-
-  state = {
-    ...getInitialState,
-  };
-
-  componentDidUpdate(prevProps) {
-    if (this.props.selectedClient !== prevProps.selectedClient) {
-      this.setState({
-        ...this.props.selectedClient,
-      });
-    }
-  }
-
-  handlecheckChange = name => () => this.setState({ [name]: false });
-
-  onChange = name => ({ target: { value } }) => {
-    this.setState({ [name]: value, error: null }, () => {
-      this.setState({
-        valid: (this.state.name && this.state.email) || (!this.state._id && this.state.email),
-      });
-    });
-  };
-
-  handleChange = (event) => {
-    this.setState(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value,
-    }));
-  };
-
-  render() {
-    const {
-      props: {
-        addUserModalOpen, toggleUserAddModal, open, handleClose, selectedClient, onSave,
-      },
-      state: {
-        username, name, valid, _id = true, email, company, error, id, max, min,
-      },
-    } = this;
-
-    return (
-      <Modal open={open} onClose={handleClose} className='modal'>
-        <div className='paper-container'>
-          <div className='paper'>
-            <h3>Add Scan</h3>
-            {_id && (
-              <div>
-                <TextField
-                  required
-                  label='Name'
-                  margin='normal'
-                  variant='outlined'
-                  value={name}
-                  onChange={this.onChange('name')}
-                  className='user-name'
-                  style={{ width: '100%' }}
-                />
-              </div>
-            )}
-            <SelectUsername user={username} handleChange={this.handleChange} />
-            <div style={{ marginBottom: '20px' }}>
-              <TextField
-                required
-                label='Min Elevation'
-                variant='outlined'
-                value={min}
-                onChange={this.onChange('min')}
-                className='user-name'
-                style={{ marginRight: '20px' }}
-              />
-              <TextField
-                required
-                label='Max Elevation'
-                variant='outlined'
-                value={max}
-                onChange={this.onChange('max')}
-                className='user-name'
-              />
-            </div>
-
-            {error && <p>{error}</p>}
-            <Button
-              disabled={valid}
-              onClick={() => onSave(name, username, min, max)}
-              variant='contained'
-              color='secondary'
-              style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}
-            >
-              Add
-            </Button>
-          </div>
+const AddScanModal = ({
+  open, handleClose, selectedClient, onSave, onChange,
+}) => (
+  <Modal open={open} onClose={handleClose} className='modal'>
+    <div className='paper-container'>
+      <div className='paper'>
+        <h3>Add Scan</h3>
+        <div>
+          <TextField
+            required
+            label='Name'
+            name='name'
+            margin='normal'
+            variant='outlined'
+            value={selectedClient.name}
+            onChange={onChange}
+            className='user-name'
+            style={{ width: '100%' }}
+          />
         </div>
-      </Modal>
-    );
-  }
-}
+        <SelectUsername user={selectedClient.username} handleChange={onChange} />
+        <div style={{ marginBottom: '20px' }}>
+          <TextField
+            required
+            name='min'
+            label='Min Elevation'
+            variant='outlined'
+            value={selectedClient.min}
+            onChange={onChange}
+            className='user-name'
+            style={{ marginRight: '20px' }}
+          />
+          <TextField
+            required
+            name='max'
+            label='Max Elevation'
+            variant='outlined'
+            value={selectedClient.max}
+            onChange={onChange}
+            className='user-name'
+          />
+        </div>
 
-export default ClientModal;
+        <Button
+          disabled={false}
+          onClick={onSave}
+          variant='contained'
+          color='secondary'
+          style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}
+        >
+          Add
+        </Button>
+      </div>
+    </div>
+  </Modal>
+);
+
+AddScanModal.propTypes = {
+  selectedClient: PropTypes.shape({
+    name: PropTypes.string,
+    username: PropTypes.number,
+    min: PropTypes.number,
+    max: PropTypes.number,
+  }).isRequired,
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+export default AddScanModal;
