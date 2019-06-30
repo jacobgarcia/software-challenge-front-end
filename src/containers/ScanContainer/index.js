@@ -9,11 +9,7 @@ class ScanContainer extends Component {
   };
 
   render() {
-    return (
-      <>
-        <ScanTable {...this.state} />
-      </>
-    );
+    return <ScanTable {...this.state} />;
   }
 }
 

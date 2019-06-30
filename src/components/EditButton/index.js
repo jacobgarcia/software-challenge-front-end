@@ -4,11 +4,9 @@ import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 
 const EditButton = ({ handleClick, user }) => (
-  <div style={{ display: 'inline-block' }}>
-    <IconButton id={Date.now()} onClick={event => handleClick(event, user)}>
-      <IconCreate />
-    </IconButton>
-  </div>
+  <IconButton onClick={event => handleClick(event, user)}>
+    <IconCreate />
+  </IconButton>
 );
 
 EditButton.propTypes = {

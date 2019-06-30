@@ -14,9 +14,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  .user-name {
-    margin-right: 8px;
-  }
 }
 
 .radio-inputs-container {
@@ -25,4 +22,8 @@
 
 .permits-container {
   padding: 16px;
+}
+
+.elevation-container {
+  margin-bottom: 20px;
 }
