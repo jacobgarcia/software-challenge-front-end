@@ -13,6 +13,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import TablePagination from '@material-ui/core/TablePagination';
 
 import MoreButton from 'components/MoreButton';
 import EditAdminModal from 'components/EditAdminModal';
@@ -32,8 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
     root: {
       width: '100%',
-      marginTop: theme.spacing(3),
-      overflowX: 'auto',
+      marginBottom: theme.spacing(2),
     },
     table: {
       minWidth: 700,
@@ -56,6 +56,8 @@ function ScanTable({ scans, users }) {
     name: 'hai',
     anchorEl: false,
   });
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   function sortByName(a, b) {
     const x = a.name.toLowerCase();
@@ -143,6 +145,10 @@ function ScanTable({ scans, users }) {
     handleClose();
   }
 
+  function handleChangePage(event, newPage) {
+    setPage(newPage);
+  }
+
   return (
     <main className={classes.layout}>
       <EditAdminModal
@@ -183,14 +189,14 @@ function ScanTable({ scans, users }) {
         color='secondary'
         aria-label='Add'
         className={classes.margin}
-        style={{ marginTop: '15px', float: 'right' }}
+        style={{ marginTop: '15px', float: 'right', marginRight: '60px' }}
         onClick={handleToggle}
       >
         <AddIcon />
       </Fab>
 
-      <Paper className={classes.root}>
-        <Table className={classes.table} size='small'>
+      <Paper className={classes.root} style={{ overflow: 'auto' }}>
+        <Table className={classes.table} size='small' style={{ minHeight: 400, overflow: 'auto' }}>
           <TableHead>
             <TableRow>
               <TableCell align='left'>Name</TableCell>
@@ -199,7 +205,7 @@ function ScanTable({ scans, users }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {scans.map((scan) => {
+            {scans.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((scan) => {
               const user = users.find(u => u.id === scan.scannedByUserId);
               return (
                 <TableRow key={`${scan.id}`}>
@@ -218,6 +224,20 @@ function ScanTable({ scans, users }) {
             })}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5]}
+          component='div'
+          count={scans.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            'aria-label': 'Previous Page',
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'Next Page',
+          }}
+          onChangePage={handleChangePage}
+        />
       </Paper>
     </main>
   );
