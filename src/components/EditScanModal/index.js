@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
@@ -8,58 +8,49 @@ import Button from '@material-ui/core/Button';
 import SelectUsername from 'components/SelectUsername';
 import './index.css';
 
-function getInitialState() {
-  return {
-    id: null,
-  };
-}
-
-class ClientModal extends Component {
-  static propTypes = {};
-
-  state = {
-    ...getInitialState,
-  };
-
-  render() {
-    const {
-      props: {
-        open, handleClose, selectedClient, onSave, onChange,
-      },
-    } = this;
-
-    return (
-      <Modal open={open} onClose={handleClose} className='modal'>
-        <div className='paper-container'>
-          <div className='paper'>
-            <h3>Edit Scan</h3>
-            <div>
-              <TextField
-                required
-                name='name'
-                label='Name'
-                margin='normal'
-                variant='outlined'
-                value={selectedClient.name}
-                onChange={onChange}
-                className='user-name'
-              />
-            </div>
-            <SelectUsername user={selectedClient.username} handleChange={onChange} />
-            <Button
-              disabled={false}
-              onClick={onSave}
-              variant='contained'
-              color='secondary'
-              style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}
-            >
-              Edit
-            </Button>
-          </div>
+const EditScanModal = ({
+  open, handleClose, selectedClient, onSave, onChange,
+}) => (
+  <Modal open={open} onClose={handleClose} className='modal'>
+    <div className='paper-container'>
+      <div className='paper'>
+        <h3>Edit Scan</h3>
+        <div>
+          <TextField
+            required
+            name='name'
+            label='Name'
+            margin='normal'
+            variant='outlined'
+            value={selectedClient.name}
+            onChange={onChange}
+            className='user-name'
+          />
         </div>
-      </Modal>
-    );
-  }
-}
+        <SelectUsername user={selectedClient.username} handleChange={onChange} />
+        <Button
+          disabled={false}
+          onClick={onSave}
+          variant='contained'
+          color='secondary'
+          style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}
+        >
+          Edit
+        </Button>
+      </div>
+    </div>
+  </Modal>
+);
 
-export default ClientModal;
+EditScanModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  selectedClient: PropTypes.shape({
+    name: PropTypes.string,
+    username: PropTypes.string,
+  }).isRequired,
+  onSave: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+export default EditScanModal;
