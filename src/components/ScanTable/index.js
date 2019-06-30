@@ -57,8 +57,7 @@ function ScanTable({ scans, users }) {
     anchorEl: false,
   });
   const [page, setPage] = React.useState(0);
-  const [nameInput, setNameInput] = React.useState('');
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage] = React.useState(5);
 
   function sortByName(a, b) {
     const x = a.name.toLowerCase();
