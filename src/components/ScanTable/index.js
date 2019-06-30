@@ -149,6 +149,8 @@ function ScanTable({ scans, users }) {
     setPage(newPage);
   }
 
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, scans.length - page * rowsPerPage);
+
   return (
     <main className={classes.layout}>
       <EditAdminModal
@@ -222,6 +224,11 @@ function ScanTable({ scans, users }) {
                 </TableRow>
               );
             })}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 75 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
           </TableBody>
         </Table>
         <TablePagination
