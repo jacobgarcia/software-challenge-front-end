@@ -15,8 +15,8 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import TablePagination from '@material-ui/core/TablePagination';
 
+import EditScanModal from 'components/EditScanModal';
 import MoreButton from 'components/MoreButton';
-import EditAdminModal from 'components/EditAdminModal';
 import AddScanModal from 'components/AddScanModal';
 import './index.less';
 
@@ -143,10 +143,10 @@ function ScanTable({ scans, users }) {
     sortScans(event.target.value);
   }
 
-  function handleEdit(id, name, userId) {
-    const editedScan = scans.find(scan => scan.id === parseInt(id, 10));
-    editedScan.name = name;
-    editedScan.scannedByUserId = parseInt(userId, 10);
+  function handleEdit() {
+    const editedScan = scans.find(scan => scan.id === parseInt(values.id, 10));
+    editedScan.name = values.name;
+    editedScan.scannedByUserId = parseInt(values.username, 10);
     sortScans(values.sort);
     handleClose();
   }
@@ -168,14 +168,14 @@ function ScanTable({ scans, users }) {
   }
 
   function onChange(event) {
-    setValues(oldValues => ({ ...oldValues, [event.target.name]: event.target.value }));
+    setValues({ ...values, [event.target.name]: event.target.value });
   }
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, scans.length - page * rowsPerPage);
 
   return (
     <main className={classes.layout}>
-      <EditAdminModal
+      <EditScanModal
         key={values}
         open={values.anchorEl}
         handleClose={handleClose}
