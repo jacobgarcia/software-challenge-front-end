@@ -16,7 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import EditScanModal from 'components/EditScanModal';
-import MoreButton from 'components/MoreButton';
+import EditButton from 'components/EditButton';
 import AddScanModal from 'components/AddScanModal';
 import './index.less';
 
@@ -238,7 +238,7 @@ function ScanTable({ scans, users }) {
                   <TableCell align='left'>{scan.name}</TableCell>
                   <TableCell align='right'>{user.name}</TableCell>
                   <TableCell numeric>
-                    <MoreButton
+                    <EditButton
                       user={`${scan.name}-${user.id}-${scan.id}`}
                       anchorEl={values.anchorEl}
                       handleClick={handleClick}
