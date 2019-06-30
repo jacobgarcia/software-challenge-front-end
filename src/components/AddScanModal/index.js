@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 
-import SelectUsername from 'components/SelectUsername';
+import UsernameSelect from 'components/UsernameSelect';
 import './index.css';
 
 function AddScanModal({
@@ -29,7 +29,7 @@ function AddScanModal({
               style={{ width: '100%' }}
             />
           </div>
-          <SelectUsername user={selectedClient.username} handleChange={onChange} />
+          <UsernameSelect user={selectedClient.username} handleChange={onChange} />
           <div style={{ marginBottom: '20px' }}>
             <TextField
               required

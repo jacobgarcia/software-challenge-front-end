@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 
-import SelectUsername from 'components/SelectUsername';
+import UsernameSelect from 'components/UsernameSelect';
 import './index.css';
 
 const EditScanModal = ({
@@ -27,7 +27,7 @@ const EditScanModal = ({
             className='user-name'
           />
         </div>
-        <SelectUsername user={selectedClient.username} handleChange={onChange} />
+        <UsernameSelect user={selectedClient.username} handleChange={onChange} />
         <Button
           disabled={false}
           onClick={onSave}
