@@ -1,0 +1,21 @@
+.paper-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.paper {
+  background-color: white;
+  padding: 24px;
+  border-radius: 4px;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.elevation-container {
+  margin-bottom: 20px;
+}
