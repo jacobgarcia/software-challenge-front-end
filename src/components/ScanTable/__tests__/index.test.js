@@ -14,8 +14,9 @@ describe('ScanTable', () => {
   };
 
   test('Should sort scans', () => {
-    const { queryByText } = render(<ScanTable {...state} />);
+    const { getByText, container } = render(<ScanTable {...state} />);
 
-    expect(queryByText(loginError)).toBeTruthy();
+    const firstElement = getByText(/Concrete Slab #1/);
+    expect(container.firstChild.childNodes[1]).toBe(firstElement);
   });
 });

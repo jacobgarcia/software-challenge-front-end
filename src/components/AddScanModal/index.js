@@ -13,7 +13,7 @@ const isDisabled = (selectedScan) => {
   const {
     name, username, min, max,
   } = selectedScan;
-  return !(name && username && min && max && !(min > max));
+  return !(name && username && min && max && !(parseFloat(min) > parseFloat(max)));
 };
 
 const AddScanModal = ({
@@ -69,9 +69,9 @@ const AddScanModal = ({
 AddScanModal.propTypes = {
   selectedScan: PropTypes.shape({
     name: PropTypes.string,
-    username: PropTypes.number,
-    min: PropTypes.number,
-    max: PropTypes.number,
+    username: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    min: PropTypes.string,
+    max: PropTypes.string,
   }).isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,

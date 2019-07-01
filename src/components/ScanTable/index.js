@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 function ScanTable({ scans, users }) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    sort: null,
+    sort: '',
     name: null,
     username: null,
     id: null,
@@ -105,8 +105,8 @@ function ScanTable({ scans, users }) {
       isAddOpen: true,
       name: '',
       username: '',
-      min: null,
-      max: null,
+      min: '',
+      max: '',
     }));
   }
 
@@ -193,16 +193,6 @@ function ScanTable({ scans, users }) {
           <MenuItem value='elevation'>Elevation</MenuItem>
         </Select>
       </FormControl>
-
-      <Fab
-        size='medium'
-        color='secondary'
-        onClick={handleAddClick}
-        style={{ marginTop: '15px', float: 'right', marginRight: '60px' }}
-      >
-        <AddIcon />
-      </Fab>
-
       <Paper style={{ overflow: 'auto' }}>
         <Table size='small' style={{ minHeight: 400, overflow: 'auto' }}>
           <TableHead>
@@ -219,7 +209,7 @@ function ScanTable({ scans, users }) {
                 <TableRow key={`${scan.id}`}>
                   <TableCell align='left'>{scan.name}</TableCell>
                   <TableCell align='right'>{user.name}</TableCell>
-                  <TableCell numeric>
+                  <TableCell>
                     <EditButton
                       user={`${scan.name}-${user.id}-${scan.id}`}
                       isEditOpen={values.isEditOpen}
@@ -252,6 +242,14 @@ function ScanTable({ scans, users }) {
           onChangePage={handleChangePage}
         />
       </Paper>
+      <Fab
+        size='medium'
+        color='secondary'
+        onClick={handleAddClick}
+        style={{ marginTop: '15px', float: 'right' }}
+      >
+        <AddIcon />
+      </Fab>
     </main>
   );
 }

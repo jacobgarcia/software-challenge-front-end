@@ -32,7 +32,9 @@ function UsernameSelect({ user, onChange }) {
         input={<OutlinedInput name='age' labelWidth={labelWidth} />}
       >
         {createUserData().map(userRecord => (
-          <MenuItem value={userRecord.id}>{userRecord.name}</MenuItem>
+          <MenuItem key={userRecord.id} value={userRecord.id}>
+            {userRecord.name}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>
@@ -40,8 +42,12 @@ function UsernameSelect({ user, onChange }) {
 }
 
 UsernameSelect.propTypes = {
-  user: PropTypes.number.isRequired,
+  user: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChange: PropTypes.func.isRequired,
+};
+
+UsernameSelect.defaultProps = {
+  user: null,
 };
 
 export default UsernameSelect;

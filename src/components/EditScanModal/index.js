@@ -47,7 +47,7 @@ EditScanModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   selectedScan: PropTypes.shape({
     name: PropTypes.string,
-    username: PropTypes.string,
+    username: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
   onSave: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
