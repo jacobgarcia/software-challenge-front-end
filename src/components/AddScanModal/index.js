@@ -6,7 +6,8 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 
 import UsernameSelect from 'components/UsernameSelect';
-import './styles.css';
+
+import 'components/styles.css';
 
 const isDisabled = (selectedClient) => {
   const {

@@ -16,14 +16,6 @@
   align-items: center;
 }
 
-.radio-inputs-container {
-  display: flex;
-}
-
-.permits-container {
-  padding: 16px;
-}
-
 .elevation-container {
   margin-bottom: 20px;
 }

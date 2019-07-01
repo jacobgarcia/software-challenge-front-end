@@ -6,7 +6,8 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 
 import UsernameSelect from 'components/UsernameSelect';
-import './index.css';
+
+import 'components/styles.css';
 
 const EditScanModal = ({
   open, handleClose, selectedClient, onSave, onChange,
