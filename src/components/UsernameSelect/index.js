@@ -8,28 +8,28 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { createUserData } from 'utils/data';
 
-function UsernameSelect({ user, handleChange }) {
+function UsernameSelect({ user, onChange }) {
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
+
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
+
   return (
     <FormControl
-      style={{ marginBottom: '30px', width: '100%', marginTop: '10px' }}
       variant='outlined'
+      style={{ marginBottom: '30px', width: '100%', marginTop: '10px' }}
     >
-      <InputLabel ref={inputLabel} htmlFor='outlined-age-native-simple'>
-        Username *
-      </InputLabel>
+      <InputLabel ref={inputLabel}>Username *</InputLabel>
       <Select
-        onChange={handleChange}
+        variant='filled'
+        onChange={onChange}
         inputProps={{
           name: 'username',
         }}
-        variant='filled'
         value={user}
-        input={<OutlinedInput name='age' labelWidth={labelWidth} id='outlined-age-native-simple' />}
+        input={<OutlinedInput name='age' labelWidth={labelWidth} />}
       >
         {createUserData().map(userRecord => (
           <MenuItem value={userRecord.id}>{userRecord.name}</MenuItem>
@@ -41,7 +41,7 @@ function UsernameSelect({ user, handleChange }) {
 
 UsernameSelect.propTypes = {
   user: PropTypes.number.isRequired,
-  handleChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default UsernameSelect;

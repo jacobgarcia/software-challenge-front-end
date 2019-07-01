@@ -1,50 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import AddIcon from '@material-ui/icons/Add';
+import Fab from '@material-ui/core/Fab';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import { makeStyles } from '@material-ui/core/styles';
 
-import EditScanModal from 'components/EditScanModal';
-import EditButton from 'components/EditButton';
 import AddScanModal from 'components/AddScanModal';
-import './index.less';
+import EditButton from 'components/EditButton';
+import EditScanModal from 'components/EditScanModal';
+
+import './styles.less';
 
 const useStyles = makeStyles(theme => ({
   layout: {
-    width: 'auto',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    marginTop: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
       marginLeft: 'auto',
       marginRight: 'auto',
-    },
-    root: {
-      width: '100%',
-      marginBottom: theme.spacing(2),
-    },
-    table: {
-      minWidth: 700,
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-      color: 'red',
-    },
-    whiteColor: {
-      color: 'red',
     },
   },
 }));
@@ -52,10 +35,14 @@ const useStyles = makeStyles(theme => ({
 function ScanTable({ scans, users }) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    sort: '',
-    name: 'hai',
-    anchorEl: false,
+    sort: null,
+    name: null,
+    username: null,
+    id: null,
+    isEditOpen: false,
+    isAddOpen: false,
   });
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage] = React.useState(5);
 
@@ -72,8 +59,8 @@ function ScanTable({ scans, users }) {
   }
 
   function sortByUsername(a, b) {
-    const x = users.find(u => u.id === a.scannedByUserId);
-    const y = users.find(u => u.id === b.scannedByUserId);
+    const x = users.find(user => user.id === a.scannedByUserId);
+    const y = users.find(user => user.id === b.scannedByUserId);
     return sortByName(x, y);
   }
 
@@ -83,36 +70,6 @@ function ScanTable({ scans, users }) {
 
   function unsort(a, b) {
     return a.id - b.id;
-  }
-
-  function handleClose() {
-    setValues(oldValues => ({
-      ...oldValues,
-      anchorEl: false,
-      add: false,
-      min: null,
-      max: null,
-    }));
-  }
-
-  function handleToggle() {
-    setValues(oldValues => ({
-      ...oldValues,
-      add: true,
-      name: '',
-      username: '',
-    }));
-  }
-
-  function handleClick(event, user) {
-    const [name, username, id] = user.split('-');
-    setValues(oldValues => ({
-      ...oldValues,
-      anchorEl: true,
-      name,
-      username,
-      id,
-    }));
   }
 
   function sortScans(sort) {
@@ -134,7 +91,38 @@ function ScanTable({ scans, users }) {
     scans.sort(sortFunction);
   }
 
-  function handleChange(event) {
+  function handleCloseModal() {
+    setValues(oldValues => ({
+      ...oldValues,
+      isEditOpen: false,
+      isAddOpen: false,
+    }));
+  }
+
+  function handleAddClick() {
+    setValues(oldValues => ({
+      ...oldValues,
+      isAddOpen: true,
+      name: '',
+      username: '',
+      min: null,
+      max: null,
+    }));
+  }
+
+  function handleEditClick(event, user) {
+    const [name, username, id] = user.split('-');
+
+    setValues(oldValues => ({
+      ...oldValues,
+      isEditOpen: true,
+      name,
+      username,
+      id,
+    }));
+  }
+
+  function handleSortChange(event) {
     setValues(oldValues => ({
       ...oldValues,
       [event.target.name]: event.target.value,
@@ -147,7 +135,7 @@ function ScanTable({ scans, users }) {
     editedScan.name = values.name;
     editedScan.scannedByUserId = parseInt(values.username, 10);
     sortScans(values.sort);
-    handleClose();
+    handleCloseModal();
   }
 
   function handleAdd() {
@@ -159,14 +147,14 @@ function ScanTable({ scans, users }) {
     };
     scans.push(newScan);
     sortScans(values.sort);
-    handleClose();
+    handleCloseModal();
   }
 
   function handleChangePage(event, newPage) {
     setPage(newPage);
   }
 
-  function onChange(event) {
+  function onChangeInput(event) {
     setValues({ ...values, [event.target.name]: event.target.value });
   }
 
@@ -175,30 +163,27 @@ function ScanTable({ scans, users }) {
   return (
     <main className={classes.layout}>
       <EditScanModal
-        key={values}
-        open={values.anchorEl}
-        handleClose={handleClose}
-        selectedClient={values}
+        open={values.isEditOpen}
+        handleClose={handleCloseModal}
+        selectedScan={values}
         onSave={handleEdit}
-        onChange={onChange}
+        onChange={onChangeInput}
       />
       <AddScanModal
-        key={values}
-        open={values.add}
-        handleClose={handleClose}
-        selectedClient={values}
+        open={values.isAddOpen}
+        handleClose={handleCloseModal}
+        selectedScan={values}
         onSave={handleAdd}
-        onChange={onChange}
+        onChange={onChangeInput}
       />
-      <FormControl className={classes.formControl} style={{ marginBottom: '30px', width: '50%' }}>
-        <InputLabel htmlFor='age-simple'>Sort Scans</InputLabel>
+      <FormControl style={{ marginBottom: '30px', width: '50%' }}>
+        <InputLabel>Sort Scans</InputLabel>
         <Select
           value={values.sort}
-          onChange={handleChange}
+          onChange={handleSortChange}
           inputProps={{
             name: 'sort',
           }}
-          className={{ root: classes.whiteColor }}
         >
           <MenuItem value=''>
             <em>None</em>
@@ -212,16 +197,14 @@ function ScanTable({ scans, users }) {
       <Fab
         size='medium'
         color='secondary'
-        aria-label='Add'
-        className={classes.margin}
+        onClick={handleAddClick}
         style={{ marginTop: '15px', float: 'right', marginRight: '60px' }}
-        onClick={handleToggle}
       >
         <AddIcon />
       </Fab>
 
-      <Paper className={classes.root} style={{ overflow: 'auto' }}>
-        <Table className={classes.table} size='small' style={{ minHeight: 400, overflow: 'auto' }}>
+      <Paper style={{ overflow: 'auto' }}>
+        <Table size='small' style={{ minHeight: 400, overflow: 'auto' }}>
           <TableHead>
             <TableRow>
               <TableCell align='left'>Name</TableCell>
@@ -239,9 +222,9 @@ function ScanTable({ scans, users }) {
                   <TableCell numeric>
                     <EditButton
                       user={`${scan.name}-${user.id}-${scan.id}`}
-                      anchorEl={values.anchorEl}
-                      handleClick={handleClick}
-                      handleClose={handleClose}
+                      isEditOpen={values.isEditOpen}
+                      handleClick={handleEditClick}
+                      handleClose={handleCloseModal}
                     />
                   </TableCell>
                 </TableRow>

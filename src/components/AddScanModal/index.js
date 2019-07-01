@@ -1,22 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TextField from '@material-ui/core/TextField';
-import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
+import Modal from '@material-ui/core/Modal';
+import TextField from '@material-ui/core/TextField';
 
 import UsernameSelect from 'components/UsernameSelect';
 
 import 'components/styles.css';
 
-const isDisabled = (selectedClient) => {
+const isDisabled = (selectedScan) => {
   const {
     name, username, min, max,
-  } = selectedClient;
+  } = selectedScan;
   return !(name && username && min && max && min < max);
 };
+
 const AddScanModal = ({
-  open, handleClose, onSave, onChange, selectedClient,
+  open, handleClose, onSave, onChange, selectedScan,
 }) => (
   <Modal open={open} onClose={handleClose} className='modal'>
     <div className='paper-container'>
@@ -25,21 +26,21 @@ const AddScanModal = ({
         <TextField
           required
           label='Name'
-          name='name'
           margin='normal'
+          name='name'
           variant='outlined'
-          value={selectedClient.name}
           onChange={onChange}
+          value={selectedScan.name}
           style={{ width: '100%' }}
         />
-        <UsernameSelect user={selectedClient.username} handleChange={onChange} />
+        <UsernameSelect user={selectedScan.username} onChange={onChange} />
         <div className='elevation-container'>
           <TextField
             required
             name='min'
             label='Min Elevation'
             variant='outlined'
-            value={selectedClient.min}
+            value={selectedScan.min}
             onChange={onChange}
             style={{ marginRight: '20px' }}
           />
@@ -48,12 +49,12 @@ const AddScanModal = ({
             name='max'
             label='Max Elevation'
             variant='outlined'
-            value={selectedClient.max}
+            value={selectedScan.max}
             onChange={onChange}
           />
         </div>
         <Button
-          disabled={isDisabled(selectedClient)}
+          disabled={isDisabled(selectedScan)}
           onClick={onSave}
           variant='contained'
           color='secondary'
@@ -66,7 +67,7 @@ const AddScanModal = ({
 );
 
 AddScanModal.propTypes = {
-  selectedClient: PropTypes.shape({
+  selectedScan: PropTypes.shape({
     name: PropTypes.string,
     username: PropTypes.number,
     min: PropTypes.number,

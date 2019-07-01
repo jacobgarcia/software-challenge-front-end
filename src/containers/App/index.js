@@ -1,22 +1,23 @@
 import React from 'react';
 
-import ScanContainer from 'containers/ScanContainer';
-import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
 import AppBar from '@material-ui/core/AppBar';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Favorite from '@material-ui/icons/Favorite';
+import Link from '@material-ui/core/Link';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-import Favorite from '@material-ui/icons/Favorite';
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
+
+import ScanContainer from 'containers/ScanContainer';
 
 import './index.css';
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#313030' }, // Purple and green play nicely together.
-    secondary: { main: '#FFB74D' }, // Purple and green play nicely together.
+    primary: { main: '#313030' },
+    secondary: { main: '#FFB74D' },
   },
 });
 
@@ -24,35 +25,15 @@ const useStyles = makeStyles({
   appBar: {
     position: 'relative',
   },
-  link: {
-    margin: theme.spacing(1, 1.5),
-  },
-  toolbar: {
-    flexWrap: 'wrap',
-  },
   toolbarTitle: {
     flexGrow: 1,
   },
   footer: {
     padding: theme.spacing(2),
-    marginTop: 'auto',
     backgroundColor: '#253238',
     color: '#ddd',
   },
 });
-
-function MadeWithLove() {
-  return (
-    <Typography variant='body2' style={{ color: '#888888' }}>
-      {'Coded with '}
-      <Favorite style={{ fontSize: '12px', color: '#F50057' }} />
-      {' by '}
-      <Link color='inherit' href='https://github.com/jacobgarcia'>
-        Jacob Garcia
-      </Link>
-    </Typography>
-  );
-}
 
 function App() {
   const classes = useStyles();
@@ -61,7 +42,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position='absolute' className={classes.appBar} color='primary'>
-        <Toolbar className={classes.toolbar}>
+        <Toolbar>
           <Typography variant='h6' color='inherit' noWrap className={classes.toolbarTitle}>
             <svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 120 120'>
               <g fillRule='evenodd'>
@@ -99,7 +80,14 @@ function App() {
           <Typography variant='body1' style={{ fontFamily: 'Lato', fontWeight: 600 }}>
             ©Imerso 2019
           </Typography>
-          <MadeWithLove />
+          <Typography variant='body2' style={{ color: '#888888' }}>
+            {'Coded with '}
+            <Favorite style={{ fontSize: '12px', color: '#F50057' }} />
+            {' by '}
+            <Link color='inherit' href='https://github.com/jacobgarcia'>
+              <u>Jacob Garcia</u>
+            </Link>
+          </Typography>
         </Container>
       </footer>
     </ThemeProvider>
