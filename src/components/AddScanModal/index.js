@@ -13,7 +13,7 @@ const isDisabled = (selectedScan) => {
   const {
     name, username, min, max,
   } = selectedScan;
-  return !(name && username && min && max && !(parseFloat(min) > parseFloat(max)));
+  return !(name && username && min && max);
 };
 
 const AddScanModal = ({
